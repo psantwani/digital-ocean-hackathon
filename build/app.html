@@ -11,7 +11,8 @@
     <script src="helpers/context_menu.js"></script>
     <script src="helpers/external_links.js"></script>    
     <script src="http://code.jquery.com/jquery-2.0.0.js"></script>
-    <script type="text/javascript" src="https://rawgit.com/t4t5/sweetalert/master/dist/sweetalert.min.js"></script>       
+    <script type="text/javascript" src="https://rawgit.com/t4t5/sweetalert/master/dist/sweetalert.min.js"></script>
+
 </head>
 <body>
     
@@ -30,6 +31,7 @@
 
             <ul class="nav navbar-top-links navbar-right projectBtns">
                 <li class = "btn btn-primary" id = "newProject">New Project</li>
+                <li class = "btn btn-primary" id = "deployProject">Deploy</li>
             </ul>
             
             <div class="navbar-default sidebar" role="navigation">
@@ -48,14 +50,13 @@
                         
                         <li id="backend_files">
                             <a href="#"><i class="fa fa-wrench fa-fw"></i>back-end<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">                                
-
+                            <ul class="nav nav-second-level projectDir">                                                                
                             </ul>                            
                         </li>
                         
                         <li id="frontend_files">
                             <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i>front-end<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">                                
+                            <ul class="nav nav-second-level projectDir">                                
 
                             </ul>                            
                         </li>                        
@@ -67,7 +68,7 @@
         <div id="page-wrapper">
             <div id="editor">
                 <textarea v-model="input" id="codeEditor"></textarea>
-                <div v-html="input | marked"></div>
+                <div v-html="input | marked" id="codeRendering"></div>
             </div> 
         </div>        
 

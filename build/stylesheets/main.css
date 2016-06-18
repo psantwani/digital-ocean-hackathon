@@ -324,3 +324,8 @@ table.dataTable thead .sorting:after {
   margin-right: 0px !important;
   padding: 8px;
 }
+.projectBtns > li {
+  float: left;
+  width: 100px;
+  margin-left: 10px;
+}

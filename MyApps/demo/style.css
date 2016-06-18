@@ -1,0 +1,8 @@
+body {
+  font-family: helvetica, arial, sans-serif;
+  margin: 25px;
+}
+
+* {
+  box-sizing: border-box;
+}
