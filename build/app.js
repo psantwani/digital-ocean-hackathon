@@ -2,7 +2,7 @@
 
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
-var os = _interopDefault(require('os'));
+var os = require('os');
 var electron = require('electron');
 var jetpack = _interopDefault(require('fs-jetpack'));
 
@@ -19,12 +19,6 @@ var app = electron.remote.app;
 var appDir = jetpack.cwd(app.getAppPath());
 
 console.log('The author of this app is:', appDir.read('package.json', 'json').author);
-
-document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('greet').innerHTML = greet();
-    document.getElementById('platform-info').innerHTML = os.platform();
-    document.getElementById('env-name').innerHTML = env.name;
-});
 
 /**SB-ADMIN-2.JS**/
 $(function() {

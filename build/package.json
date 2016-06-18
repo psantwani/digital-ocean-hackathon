@@ -1,10 +1,10 @@
 {
-  "name": "electron-boilerplate-dev",
-  "productName": "Electron Boilerplate Dev",
-  "description": "Starter for your Electron application. Out of the box ready for serious stuff.",
+  "name": "digital-notion-dev",
+  "productName": "DigitalNotion Dev",
+  "description": "A simple code editor with continuous deployment",
   "version": "0.1.0",
-  "author": "Mr Gumby",
-  "copyright": "© 2016, your company here",
+  "author": "Piyush Santwani",
+  "copyright": "DigitalOcean Hackathon 2016",
   "main": "background.js",
   "dependencies": {
     "fs-jetpack": "^0.9.0",
