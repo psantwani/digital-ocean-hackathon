@@ -4,12 +4,12 @@ body {
   height: 100%;
   margin: 0;
   padding: 0;
+  font-family: 'Raleway', sans-serif !important;
 }
 body {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: sans-serif;
 }
 a {
   text-decoration: none;
@@ -31,8 +31,21 @@ body {
   flex-direction: column;
 }
 #codeEditor {
-  min-height: 400px;
+  height: 500px;
+  max-height: 500px;
+  overflow: hidden;
   border: none;
+  overflow-y: auto;
+  padding: 10px;
+  border-bottom: 1px solid #e7e7e7;
+}
+#editorLog {
+  height: 150px;
+  max-height: 150px;
+  overflow: hidden;
+  border: none;
+  overflow-y: auto;
+  padding: 10px;
   border-bottom: 1px solid #e7e7e7;
 }
 #editor > * {
@@ -343,10 +356,25 @@ table.dataTable thead .sorting:after {
   text-align: center;
   padding: 10px;
 }
+#projectDetails {
+  background-color: aquamarine;
+}
 .projectDetails > p {
   margin: 0px;
 }
 hr {
   margin-top: 0px !important;
   margin-bottom: 0px !important;
+}
+.navbar-static-top {
+  background-color: currentColor !important;
+}
+.navbar-brand {
+  color: aliceblue !important;
+}
+.projectBtns > li {
+  color: aliceblue !important;
+}
+#side-menu > li {
+  font-size: 20px;
 }

@@ -25,65 +25,65 @@ var fileOpen = "";
 var app = electron.remote.app;
 var appDir = jetpack.cwd(app.getAppPath());
 var project_port;
-console.log('I am ', appDir.read('package.json', 'json').author);
+//console.log('I am ', appDir.read('package.json', 'json').author);
 
 
 /**Experiment**/
 fsExtra.readFile(__dirname.replace("/build","") + '/key.txt', 'utf8', function(err,data){
-  console.log(__dirname.replace("/build","") + "/key.txt");
-  console.log(data);
+  //console.log(__dirname.replace("/build","") + "/key.txt");
+  //console.log(data);
   if(data == ""){
     fsExtra.readFile('/Users/psantwani/.ssh/id_rsa.pub', 'utf8', function(err,data){
-      console.log(data);
+      //console.log(data);
       fsExtra.writeFile(__dirname.replace("/build","") + '/key.txt', data, function (err) {
         if (err) { throw err; }
-        console.log('Success');
+        //console.log('Success');
         $.ajax({
-            type: "POST",
-            dataType: "json",
-            url:'http://139.59.9.43:3000/writeKey',
-            data: {"key": data},
-            success: function(data){  
-              console.log("API response : " + data);
+          type: "POST",
+          dataType: "json",
+          url:'http://139.59.9.43:3000/writeKey',
+          data: {"key": data},
+          success: function(data){  
+              //console.log("API response : " + data);
             }
           });          
-        });
       });
-    }
-  });
-      
+    });
+  }
+});
+
 
 /**SB-ADMIN-2.JS**/
 $(function() {
-    $('#side-menu').metisMenu();
+  $('#side-menu').metisMenu();
 });
 
 $(function() {
-    $(window).bind("load resize", function() {
-        var topOffset = 50;
-        var width = (this.window.innerWidth > 0) ? this.window.innerWidth : this.screen.width;
-        if (width < 768) {
-            $('div.navbar-collapse').addClass('collapse');
-            topOffset = 100;
-        } else {
-            $('div.navbar-collapse').removeClass('collapse');
-        }
-
-        var height = ((this.window.innerHeight > 0) ? this.window.innerHeight : this.screen.height) - 1;
-        height = height - topOffset;
-        if (height < 1) height = 1;
-        if (height > topOffset) {
-            $("#page-wrapper").css("min-height", (height) + "px");
-        }
-    });
-
-    var url = window.location;
-    var element = $('ul.nav a').filter(function() {
-        return this.href == url || url.href.indexOf(this.href) == 0;
-    }).addClass('active').parent().parent().addClass('in').parent();
-    if (element.is('li')) {
-        element.addClass('active');
+  $(window).bind("load resize", function() {
+    var topOffset = 50;
+    var width = (this.window.innerWidth > 0) ? this.window.innerWidth : this.screen.width;
+    if (width < 768) {
+      $('div.navbar-collapse').addClass('collapse');
+      topOffset = 100;
+    } else {
+      $('div.navbar-collapse').removeClass('collapse');
     }
+
+    var height = ((this.window.innerHeight > 0) ? this.window.innerHeight : this.screen.height) - 1;
+    height = height - topOffset;
+    if (height < 1) height = 1;
+    if (height > topOffset) {
+      $("#page-wrapper").css("min-height", (height) + "px");
+    }
+  });
+
+  var url = window.location;
+  var element = $('ul.nav a').filter(function() {
+    return this.href == url || url.href.indexOf(this.href) == 0;
+  }).addClass('active').parent().parent().addClass('in').parent();
+  if (element.is('li')) {
+    element.addClass('active');
+  }
 });
 
 
@@ -112,37 +112,37 @@ function saveFileDialog() {
     fs.writeFile(fileOpen, editor.$data.input, function (err) {      
       if (err) { throw err; }
       $("#deployProject").click();
-      //alert("Saved!");
+      alert("Saved!");
     });
   }
 }
 
 var template = [
+{
+  label: 'Markdown Editor',
+  submenu: [
   {
-    label: 'Markdown Editor',
-    submenu: [
-      {
-        label: "Quit",
-        accelerator: "Command+Q",
-        selector: 'terminate:'
-      }
-    ]
+    label: "Quit",
+    accelerator: "Command+Q",
+    selector: 'terminate:'
+  }
+  ]
+},
+{
+  label: 'File',
+  submenu: [
+  {
+    label: "Open",
+    accelerator: "Command+O",
+    click: openFileDialog
   },
   {
-    label: 'File',
-    submenu: [
-      {
-        label: "Open",
-        accelerator: "Command+O",
-        click: openFileDialog
-      },
-      {
-        label: "Save",
-        accelerator: "Command+S",
-        click: saveFileDialog
-      },
-    ]
-  }
+    label: "Save",
+    accelerator: "Command+S",
+    click: saveFileDialog
+  },
+  ]
+}
 ];
 const menu = Menu.buildFromTemplate(template);
 Menu.setApplicationMenu(menu);
@@ -167,77 +167,110 @@ function readFilesInDir(dirPath, callback){
           backEndFiles = obj.back_end;  
           if(!projectCreated){
             files.forEach(function(f) {
-            if(f == "project_details.json"){
-              var file = dirPath + "/" + f;
-              jsonfile.readFile(file, function(err, obj) {  
+              if(f == "project_details.json"){
+                var file = dirPath + "/" + f;
+                jsonfile.readFile(file, function(err, obj) {  
 
-                if(typeof obj.port === "undefined"){
+                  if(typeof obj.port === "undefined"){
                     $.ajax({
-                  type: "GET",
-                  dataType: "html",
-                  url:'http://139.59.9.43:3000/getFreePort',
-                success: function(data){  
-                  project_port = data;                  
-                  updateProjectDetails(false);
-                    }
-                  });  
-                }                
+                      type: "GET",
+                      dataType: "html",
+                      url:'http://139.59.9.43:3000/getFreePort',
+                      success: function(data){  
+                        project_port = data;                  
+                        updateProjectDetails(false);
+                      }
+                    });  
+                  }                
 
-                var url = obj.url;            
-                var lastDeployedAt = obj.lastDeployedAt;
-                if(lastDeployedAt != "Not deployed yet." && typeof lastDeployedAt != "undefined"){
-                  $("#lastDeployedAt").html(new Date(lastDeployedAt));  
-                }else{
-                  $("#lastDeployedAt").html(lastDeployedAt);  
-                }            
-                $("#projectUrl").html(url);
-              });
-            }
+                  var url = obj.url;            
+                  var lastDeployedAt = obj.lastDeployedAt;
+                  if(lastDeployedAt != "Not deployed yet." && typeof lastDeployedAt != "undefined"){
+                    $("#lastDeployedAt").html(new Date(lastDeployedAt));  
+                  }else{
+                    $("#lastDeployedAt").html(lastDeployedAt);  
+                  }            
+                  $("#projectUrl").html(url);
+                });
+              }
 
-            if(frontEndFiles.indexOf(f.toString()) > -1){
-              $("#frontend_files > ul").append($('<li>').html("<a class = 'projectFile' href='#editor'><span class='fileNameInList'>" + f + "</span><span class='rename_file fa fa-pencil' id='"+ dirPath + "/" + f +"_rename_file'></span><span class='remove_file remove_frontend_file fa fa-minus' id='"+ dirPath + "/" + f +"_remove_file'></span></a>"));          
-            }
-            else if(backEndFiles.indexOf(f.toString()) > -1){
-              $("#backend_files > ul").append($('<li>').html("<a class = 'projectFile' href='#editor'><span class='fileNameInList'>" + f + "</span><span class='rename_file fa fa-pencil' id='"+ dirPath + "/" + f +"_rename_file'></span><span class='remove_file remove_backend_file fa fa-minus' id='"+ dirPath + "/" +  f +"_remove_file'></span></a>"));
-            }
-            projectCreated = true;
-            $("#editor").focus();
-          });
-          }                    
-        });
-      }
-    });
-  });
+              if(frontEndFiles.indexOf(f.toString()) > -1){
+                $("#frontend_files > ul").append($('<li>').html("<a class = 'projectFile' href='#editor'><span class='fileNameInList'>" + f + "</span><span class='rename_file fa fa-pencil-square-o' id='"+ dirPath + "/" + f +"_rename_file'></span><span class='remove_file remove_frontend_file fa fa-minus-square-o' id='"+ dirPath + "/" + f +"_remove_file'></span></a>"));          
+              }
+              else if(backEndFiles.indexOf(f.toString()) > -1){
+                $("#backend_files > ul").append($('<li>').html("<a class = 'projectFile' href='#editor'><span class='fileNameInList'>" + f + "</span><span class='rename_file fa fa-pencil-square-o' id='"+ dirPath + "/" + f +"_rename_file'></span><span class='remove_file remove_backend_file fa fa-minus-square-o' id='"+ dirPath + "/" +  f +"_remove_file'></span></a>"));
+              }
+              projectCreated = true;
+              $("#editor").focus();
+            });
+}                    
+});
+}
+});
+});
 callback(true);
 }
 
 
-/**Creating New Project**/
-$("#newProject").on("click", function(){
+$("#importProject").on("click", function(){
   swal({
-      title: "DO HACK 2016", 
-      text: "Enter your project name:", 
-      type: "input",
-      inputType: "text",
-      showCancelButton: true,
-      closeOnConfirm: true
-    }, function(name) { 
-      project_name = name;   
+    title: "DO HACK 2016", 
+    text: "Enter project code:", 
+    type: "input",
+    inputType: "text",
+    showCancelButton: true,
+    closeOnConfirm: true
+  }, function(name) { 
+      //console.log("project : " + name);
+      project_name = name;
       folder_name = project_name.replace(/ /g,'');
+      //console.log("folder : " + folder_name);
       var dirname = __dirname.toString();
       dirname = dirname.replace("/build","");
       var dir = dirname + "/MyApps/" + folder_name;
       project_dir = dir;
-    if (!fs.existsSync(dir)){
+      //console.log("project dir : " + project_dir);
+      if (!fs.existsSync(dir)){
         fsExtra.mkdirs(dir,function(err){
-          if (err) return console.error(err);
-          fsExtra.copy(dirname + '/DOHACK2016/', dir + '/', function (err) {
-            if (err) return console.error(err)
-            console.log("files copied!");
-            readFilesInDir(project_dir, function(data){
-              if(data){
-                  console.log("deploying");
-                  console.log('loginCredentials - ' + loginCredentials);
+          //console.log("creating directory");
+          exec("rsync -avh master@139.59.9.43:~/"+project_name+ "/* " + project_dir + "/" , function (error, stdout, stderr) {
+            //console.log(stdout.toString('utf8'));            
+            readProjectAndLoginDetails(project_dir);
+            if(error != null){
+              console.log('exec error : ' + error);
+            }
+          });
+        });
+      }
+    });
+});
+
+/**Creating New Project**/
+$("#newProject").on("click", function(){
+  swal({
+    title: "DO HACK 2016", 
+    text: "Enter your project name:", 
+    type: "input",
+    inputType: "text",
+    showCancelButton: true,
+    closeOnConfirm: true
+  }, function(name) { 
+    project_name = name;   
+    folder_name = project_name.replace(/ /g,'');
+    var dirname = __dirname.toString();
+    dirname = dirname.replace("/build","");
+    var dir = dirname + "/MyApps/" + folder_name;
+    project_dir = dir;
+    if (!fs.existsSync(dir)){
+      fsExtra.mkdirs(dir,function(err){
+        if (err) return console.error(err);
+        fsExtra.copy(dirname + '/DOHACK2016/', dir + '/', function (err) {
+          if (err) return console.error(err)
+            //console.log("files copied!");
+          readFilesInDir(project_dir, function(data){
+            if(data){
+                  //console.log("deploying");
+                  //console.log('loginCredentials - ' + loginCredentials);
                   fsExtra.writeFile(project_dir + '/users.htpasswd', loginCredentials , function (err) {
                     if (err) { throw err; }
                     $("#loginUsername").html(loginCredentials.split(":")[0]);
@@ -245,9 +278,9 @@ $("#newProject").on("click", function(){
                   });
 
                   //$("#deployProject").click();
-              }
-            });
-          });       
+                }
+              });
+        });       
         //   fsExtra.copy(dirname + '/DOHACK2016/package.json', dir + '/package.json', function (err) {
         //     if (err) return console.error(err)
         //     console.log("package.json created!")            
@@ -288,22 +321,22 @@ $("#newProject").on("click", function(){
         //     console.log("style.css created!")
         //     readFilesInDir(project_dir);
         // });   
-        console.log("New project folder ready!")
-
+        //console.log("New project folder ready!")
+        $("#projectCode").html(project_name);
 
         
 
 
-        });       
-      }      
-  });  
+      });       
+}      
+});  
 });
 
 
 $(document).click(function(event) {    
-    var ele = $(event.target);
-    var className = ele[0].className;
-    console.log(className);
+  var ele = $(event.target);
+  var className = ele[0].className;
+    //console.log(className);
     if(className.indexOf("remove_backend_file") > -1){      
       var ele = $(event.target);  
       var filePath = ele[0].id.toString().split("_remove_file")[0];    
@@ -341,60 +374,60 @@ $(document).click(function(event) {
     else if(className == "projectFile"){
       var name = $(event.target).text();
       var file = project_dir + "/" + name;
-      console.log(file);      
+      //console.log(file);      
       fs.readFile(file, 'utf8', function(err, data) {
-          fileOpen = file;
-          console.log("#codeEditor");
+        fileOpen = file;
+          //console.log("#codeEditor");
           // $("#codeEditor").val(data);
           editor.$data.filename = name;
           editor.$data.input = data;
           $("#codeEditor").focus();
-      });
+        });
     }    
-});
+  });
 
 function deleteFile(filePath){
   fsExtra.remove(filePath, function (err) {
     if (err) return console.error(err) 
-    console.log('success!')
-  });
+    //console.log('success!')
+});
 }
 
 function renameFile(ele, filePath){
   var oldName = ele.innerHTML;  
   swal({
-      title: "DO HACK 2016", 
-      text: "Rename file to:", 
-      type: "input",
-      inputType: "text",
-      showCancelButton: true,
-      closeOnConfirm: true
-    }, function(name) {       
-      var newName = name;
-      var newFilePath = filePath.replace(oldName, newName);
-      console.log("old : " + oldName);
-      console.log("new  : " + newName);
-      console.log("old path : " + filePath);
-      console.log("new path : " + newFilePath);
+    title: "DO HACK 2016", 
+    text: "Rename file to:", 
+    type: "input",
+    inputType: "text",
+    showCancelButton: true,
+    closeOnConfirm: true
+  }, function(name) {       
+    var newName = name;
+    var newFilePath = filePath.replace(oldName, newName);
+      //console.log("old : " + oldName);
+      //console.log("new  : " + newName);
+      //console.log("old path : " + filePath);
+      //console.log("new path : " + newFilePath);
       fsExtra.move(filePath, newFilePath, function (err) {
         ele.innerHTML = name;
         if (err) {
           throw err;
         } 
-        console.log("Rename success.");
+        //console.log("Rename success.");
       });
-  });
+    });
 }
 
 
 var exec = require('child_process').exec;
 $("#deployProject").on("click", function(){    
   exec("fly production -f " + project_dir + "/flightplan.js", function (error, stdout, stderr) {
-    console.log(stdout.toString('utf8'));
+    //console.log(stdout.toString('utf8'));
     alert("Deployed");
     updateProjectDetails();
     if(error != null){
-      console.log('exec error : ' + error);
+      //console.log('exec error : ' + error);
     }
   });
 
@@ -402,23 +435,41 @@ $("#deployProject").on("click", function(){
 
 function updateProjectStructure(){
   var file = project_dir + "/project_structure.json";
-  console.log(file);
+  //console.log(file);
   
   var data = {
     "front_end" : frontEndFiles,
     "back_end" : backEndFiles
   }
   data = JSON.stringify(data);
-  console.log(data)
+  //console.log(data)
   fsExtra.outputFile(file,data, function (err) {
     console.log(err) // => null       
   });
 }
 
+function readProjectAndLoginDetails(folderPath){
+  var folderArr = folderPath.split("/");
+  project_name = folderArr[folderArr.length - 1];
+      //console.log(project_name);
+      $("#projectCode").html(project_name);
 
-function updateProjectDetails(show){
-  var file = project_dir + "/project_details.json";
-  console.log(file);
+      jsonfile.readFile(folderPath + "/project_details.json", function(err, obj) {  
+        project_port = obj.port;
+      });
+
+      fsExtra.readFile(folderPath + '/users.htpasswd', 'utf8', function(err,data){
+       $("#loginUsername").html(data.split(":")[0]);
+       $("#loginPassword").html(data.split(":")[1]);
+     });
+
+      readFilesInDir(folderPath, function(data){        
+      });
+    }
+
+    function updateProjectDetails(show){
+      var file = project_dir + "/project_details.json";
+  //console.log(file);
   var deployTime = Date.now();
   var data = {
     "url" : "http://139.59.9.43:" + project_port + "/",
@@ -426,9 +477,9 @@ function updateProjectDetails(show){
     "port" : parseInt(project_port)
   }
   data = JSON.stringify(data);
-  console.log(data)
+  //console.log(data)
   fsExtra.outputFile(file,data, function (err) {
-    console.log(err) // => null  
+    //console.log(err) // => null  
     if(show !== false){
       $("#lastDeployedAt").html(new Date(deployTime));
       $("#projectUrl").html("http://139.59.9.43:" + project_port + "/");
@@ -440,26 +491,29 @@ $("#openProject").on("click", function(){
 
   dialog.showOpenDialog({properties: ['openDirectory']},
     function (folder) {
-    console.log(folder);
+    //console.log(folder);
     if(typeof folder != "undefined"){
       var folderPath = folder[0];
-    project_dir = folderPath;
-    if (folderPath) {
-
+      project_dir = folderPath;
+      if (folderPath) {
+        var folderArr = folderPath.split("/");
+        project_name = folderArr[folderArr.length - 1];
+      //console.log(project_name);
+      $("#projectCode").html(project_name);
       jsonfile.readFile(project_dir + "/project_details.json", function(err, obj) {  
         project_port = obj.port;
       });
 
       fsExtra.readFile(project_dir + '/users.htpasswd', 'utf8', function(err,data){
-         $("#loginUsername").html(data.split(":")[0]);
-        $("#loginPassword").html(data.split(":")[1]);
-      });
+       $("#loginUsername").html(data.split(":")[0]);
+       $("#loginPassword").html(data.split(":")[1]);
+     });
 
       readFilesInDir(folderPath, function(data){        
       });
     }
-    }    
-  });
+  }    
+});
 });
 
 //Add file.
@@ -467,43 +521,43 @@ $(".add_new_file").on("click", function(event){
   var element = $(event.target)[0];
   var id = element.id;
   swal({
-      title: "DO HACK 2016", 
-      text: "Enter new file name:", 
-      type: "input",
-      inputType: "text",
-      showCancelButton: true,
-      closeOnConfirm: true
-    }, function(name) { 
-      if(id == "frontend_add_file"){
-        $("#frontend_files > ul").append($('<li>').html("<a class = 'projectFile' href='#editor'><span class='fileNameInList'>" + name + "</span><span class='rename_file fa fa-pencil' id='"+ project_dir + "/" + name +"_rename_file'></span><span class='remove_file remove_frontend_file fa fa-minus' id='"+ project_dir + "/" + name +"_remove_file'></span></a>"));         
-        createFile(project_dir + "/" + name);
-        frontEndFiles.push(name);
-        updateProjectStructure();
-      }      
-      else if(id == "backend_add_file"){
-        $("#backend_files > ul").append($('<li>').html("<a class = 'projectFile' href='#editor'><span class='fileNameInList'>" + name + "</span><span class='rename_file fa fa-pencil' id='"+ project_dir + "/" + name +"_rename_file'></span><span class='remove_file remove_backend_file fa fa-minus' id='"+ project_dir + "/" +  name +"_remove_file'></span></a>"));
-        createFile(project_dir + "/" + name);
-        backEndFiles.push(name);
-        updateProjectStructure();
-      }
+    title: "DO HACK 2016", 
+    text: "Enter new file name:", 
+    type: "input",
+    inputType: "text",
+    showCancelButton: true,
+    closeOnConfirm: true
+  }, function(name) { 
+    if(id == "frontend_add_file"){
+      $("#frontend_files > ul").append($('<li>').html("<a class = 'projectFile' href='#editor'><span class='fileNameInList'>" + name + "</span><span class='rename_file fa fa-pencil-square-o' id='"+ project_dir + "/" + name +"_rename_file'></span><span class='remove_file remove_frontend_file fa fa-minus-square-o' id='"+ project_dir + "/" + name +"_remove_file'></span></a>"));         
+      createFile(project_dir + "/" + name);
+      frontEndFiles.push(name);
+      updateProjectStructure();
+    }      
+    else if(id == "backend_add_file"){
+      $("#backend_files > ul").append($('<li>').html("<a class = 'projectFile' href='#editor'><span class='fileNameInList'>" + name + "</span><span class='rename_file fa fa-pencil-square-o' id='"+ project_dir + "/" + name +"_rename_file'></span><span class='remove_file remove_backend_file fa fa-minus-square-o' id='"+ project_dir + "/" +  name +"_remove_file'></span></a>"));
+      createFile(project_dir + "/" + name);
+      backEndFiles.push(name);
+      updateProjectStructure();
+    }
   });
 });
 
 function createFile(filePath){
   fsExtra.ensureFile(filePath, function (err) {
     if (err) return console.error(err) 
-    console.log('success!')
+      console.log('success!')
   });
 }
 
 
 function randString(x){
-    var s = "";
-    while(s.length<x&&x>0){
-        var r = Math.random();
-        s+= (r<0.1?Math.floor(r*100):String.fromCharCode(Math.floor(r*26) + (r>0.5?97:65)));
-    }
-    return s;
+  var s = "";
+  while(s.length<x&&x>0){
+    var r = Math.random();
+    s+= (r<0.1?Math.floor(r*100):String.fromCharCode(Math.floor(r*26) + (r>0.5?97:65)));
+  }
+  return s;
 }
 }());
 //# sourceMappingURL=app.js.map

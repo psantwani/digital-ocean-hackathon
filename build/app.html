@@ -2,16 +2,17 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>DO HACK 2016</title>
+    <title>DIGITAL NOTION</title>
     <link href="stylesheets/main.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/metisMenu/2.5.2/metisMenu.min.css" type="text/css">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="https://rawgit.com/t4t5/sweetalert/master/dist/sweetalert.css">
     <script src="helpers/context_menu.js"></script>
     <script src="helpers/external_links.js"></script>    
     <script src="http://code.jquery.com/jquery-2.0.0.js"></script>
-    <script type="text/javascript" src="https://rawgit.com/t4t5/sweetalert/master/dist/sweetalert.min.js"></script>
+    <script type="text/javascript" src="https://rawgit.com/t4t5/sweetalert/master/dist/sweetalert.min.js"></script>    
 
 </head>
 <body>
@@ -26,13 +27,14 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html">DO HACK 2016</a>
+                <a class="navbar-brand" href="index.html">DIGITAL NOTION</a>
             </div>            
 
             <ul class="nav navbar-top-links navbar-right projectBtns">
-                <li class = "btn btn-primary" id = "openProject">Open Project</li>
-                <li class = "btn btn-success" id = "newProject">New Project</li>
-                <li class = "btn btn-danger" id = "deployProject">Deploy</li>
+                <li class = "btn " id = "importProject">Import Project</li>
+                <li class = "btn " id = "openProject">Open Project</li>
+                <li class = "btn " id = "newProject">New Project</li>
+                <li class = "btn " id = "deployProject">Deploy</li>
             </ul>
             
             <div class="navbar-default sidebar" role="navigation">
@@ -62,10 +64,12 @@
                             </ul>                            
                         </li>                        
                     </ul>
+                    <div class = "projectDetails" id = "projectDetails"><p>PROJECT DETAILS</p></div><hr>
                     <div class = "projectDetails"><p>Last deployed at - </p><p id = "lastDeployedAt">Not deployed yet.</p></div><hr>
                     <div class = "projectDetails"><p>Project URL - </p><p id = "projectUrl">Not generated yet.</p></div><hr>
                     <div class = "projectDetails"><p>Login Username - </p><p id = "loginUsername">Not set yet.</p></div><hr>
-                    <div class = "projectDetails"><p>Login Password - </p><p id = "loginPassword">Not set yet.</p></div>
+                    <div class = "projectDetails"><p>Login Password - </p><p id = "loginPassword">Not set yet.</p></div><hr>
+                    <div class = "projectDetails"><p>Share Project Code  - </p><p id = "projectCode">Not generated yet.</p></div>
                 </div>                
             </div>            
         </nav>
@@ -73,6 +77,7 @@
         <div id="page-wrapper">
             <div id="editor">
                 <textarea v-model="input" id="codeEditor"></textarea>
+                <textarea id="editorLog">Editor Logs</textarea>
                 <!-- <div v-html="input | marked" id="codeRendering"></div> -->
             </div> 
         </div>        
