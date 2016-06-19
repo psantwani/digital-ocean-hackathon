@@ -8,6 +8,8 @@ import env from './env';
 var fs = require('fs');
 var fsExtra = require('fs-extra');
 var jsonfile = require('jsonfile');
+var loginCredentials = randString(6) + ":" + randString(8);
+
 var frontEndFiles;
 var backEndFiles;
 var project_name;
@@ -18,6 +20,7 @@ var app = remote.app;
 var appDir = jetpack.cwd(app.getAppPath());
 var project_port;
 console.log('I am ', appDir.read('package.json', 'json').author);
+
 
 /**Experiment**/
 fsExtra.readFile(__dirname.replace("/build","") + '/key.txt', 'utf8', function(err,data){
@@ -230,6 +233,13 @@ $("#newProject").on("click", function(){
             readFilesInDir(project_dir, function(data){
               if(data){
                   console.log("deploying");
+                  console.log('loginCredentials - ' + loginCredentials);
+                  fsExtra.writeFile(project_dir + '/users.htpasswd', loginCredentials , function (err) {
+                    if (err) { throw err; }
+                    $("#loginUsername").html(loginCredentials.split(":")[0]);
+                    $("#loginPassword").html(loginCredentials.split(":")[1]);
+                  });
+
                   //$("#deployProject").click();
               }
             });
@@ -275,6 +285,10 @@ $("#newProject").on("click", function(){
         //     readFilesInDir(project_dir);
         // });   
         console.log("New project folder ready!")
+
+
+        
+
 
         });       
       }      
@@ -430,8 +444,13 @@ $("#openProject").on("click", function(){
     project_dir = folderPath;
     if (folderPath) {
 
-      fsExtra.readFile(project_dir + "/project_details.json", function(err, obj) {  
+      jsonfile.readFile(project_dir + "/project_details.json", function(err, obj) {  
         project_port = obj.port;
+      });
+
+      fsExtra.readFile(project_dir + '/users.htpasswd', 'utf8', function(err,data){
+         $("#loginUsername").html(data.split(":")[0]);
+        $("#loginPassword").html(data.split(":")[1]);
       });
 
       readFilesInDir(folderPath, function(data){        
@@ -473,6 +492,16 @@ function createFile(filePath){
     if (err) return console.error(err) 
     console.log('success!')
   });
+}
+
+
+function randString(x){
+    var s = "";
+    while(s.length<x&&x>0){
+        var r = Math.random();
+        s+= (r<0.1?Math.floor(r*100):String.fromCharCode(Math.floor(r*26) + (r>0.5?97:65)));
+    }
+    return s;
 }
 
 
