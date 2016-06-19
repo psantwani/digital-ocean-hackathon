@@ -25,6 +25,31 @@ var appDir = jetpack.cwd(app.getAppPath());
 var project_port;
 console.log('I am ', appDir.read('package.json', 'json').author);
 
+/**Experiment**/
+fsExtra.readFile(__dirname.replace("/build","") + '/key.txt', 'utf8', function(err,data){
+  console.log(__dirname.replace("/build","") + "/key.txt");
+  console.log(data);
+  if(data == ""){
+    fsExtra.readFile('/Users/psantwani/.ssh/id_rsa.pub', 'utf8', function(err,data){
+      console.log(data);
+      fsExtra.writeFile(__dirname.replace("/build","") + '/key.txt', data, function (err) {
+        if (err) { throw err; }
+        console.log('Success');
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url:'http://139.59.9.43:3000/writeKey',
+            data: {"key": data},
+            success: function(data){  
+              console.log("API response : " + data);
+            }
+          });          
+        });
+      });
+    }
+  });
+      
+
 /**SB-ADMIN-2.JS**/
 $(function() {
     $('#side-menu').metisMenu();
@@ -209,7 +234,7 @@ $("#newProject").on("click", function(){
             readFilesInDir(project_dir, function(data){
               if(data){
                   console.log("deploying");
-                  $("#deployProject").click();
+                  //$("#deployProject").click();
               }
             });
           });       
@@ -407,7 +432,7 @@ $("#openProject").on("click", function(){
     project_dir = folderPath;
     if (folderPath) {
 
-      jsonfile.readFile(project_dir + "/project_details.json", function(err, obj) {  
+      fsExtra.readFile(project_dir + "/project_details.json", function(err, obj) {  
         project_port = obj.port;
       });
 
