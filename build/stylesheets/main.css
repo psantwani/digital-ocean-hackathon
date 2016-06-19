@@ -326,6 +326,27 @@ table.dataTable thead .sorting:after {
 }
 .projectBtns > li {
   float: left;
-  width: 100px;
+  width: 120px;
   margin-left: 10px;
+}
+.add_new_file {
+  float: right;
+}
+.rename_file {
+  float: right;
+  margin-left: 5px;
+}
+.remove_file {
+  float: right;
+}
+.projectDetails {
+  text-align: center;
+  padding: 10px;
+}
+.projectDetails > p {
+  margin: 0px;
+}
+hr {
+  margin-top: 0px !important;
+  margin-bottom: 0px !important;
 }

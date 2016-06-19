@@ -30,14 +30,15 @@
             </div>            
 
             <ul class="nav navbar-top-links navbar-right projectBtns">
-                <li class = "btn btn-primary" id = "newProject">New Project</li>
-                <li class = "btn btn-primary" id = "deployProject">Deploy</li>
+                <li class = "btn btn-primary" id = "openProject">Open Project</li>
+                <li class = "btn btn-success" id = "newProject">New Project</li>
+                <li class = "btn btn-danger" id = "deployProject">Deploy</li>
             </ul>
             
             <div class="navbar-default sidebar" role="navigation">
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
-                        <li class="sidebar-search">
+                       <!--  <li class="sidebar-search">
                             <div class="input-group custom-search-form">
                                 <input type="text" class="form-control" placeholder="Search...">
                                 <span class="input-group-btn">
@@ -46,21 +47,23 @@
                                 </button>
                             </span>
                             </div>                            
-                        </li>
+                        </li> -->
                         
                         <li id="backend_files">
-                            <a href="#"><i class="fa fa-wrench fa-fw"></i>back-end<span class="fa arrow"></span></a>
+                            <a href="#"><i class="fa fa-wrench fa-fw"></i>back-end<span class="add_new_file fa fa-plus" id="backend_add_file"></span></a>
                             <ul class="nav nav-second-level projectDir">                                                                
                             </ul>                            
                         </li>
                         
                         <li id="frontend_files">
-                            <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i>front-end<span class="fa arrow"></span></a>
+                            <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i>front-end<span class="add_new_file fa fa-plus" id="frontend_add_file" class=""></span></a>
                             <ul class="nav nav-second-level projectDir">                                
 
                             </ul>                            
                         </li>                        
                     </ul>
+                    <div class = "projectDetails"><p>Last deployed at - </p><p id = "lastDeployedAt">Not deployed yet.</p></div><hr>
+                    <div class = "projectDetails"><p>Project URL - </p><p id = "projectUrl">Not generated yet.</p></div>
                 </div>                
             </div>            
         </nav>
@@ -68,7 +71,7 @@
         <div id="page-wrapper">
             <div id="editor">
                 <textarea v-model="input" id="codeEditor"></textarea>
-                <div v-html="input | marked" id="codeRendering"></div>
+                <!-- <div v-html="input | marked" id="codeRendering"></div> -->
             </div> 
         </div>        
 

@@ -1,7 +1,9 @@
 var plan = require('flightplan');
 
-var appName = 'node-app';
-var username = 'deploy';
+var myDir = __dirname.split("/");
+var appName = myDir[myDir.length - 1];
+console.log(appName);
+var username = 'master';
 var startFile = 'server.js';
 
 //var tmpDir = appName+'-' + new Date().getTime();
@@ -13,7 +15,7 @@ plan.target('staging', [
   {
     host: '139.59.9.43',
     username: username,    
-    password : '*****',
+    password : 'master',
     agent: process.env.SSH_AUTH_SOCK
   }
 ]);
@@ -22,7 +24,7 @@ plan.target('production', [
   {
     host: '139.59.9.43',
     username: username,
-    password : '*****',
+    password : 'master',
     agent: process.env.SSH_AUTH_SOCK
   },
 //add in another server if you have more than one
@@ -50,7 +52,7 @@ plan.local(function(local) {
 plan.remote(function(remote) {
   remote.log('Move folder to root');
   remote.sudo('cp -R /tmp/' + tmpDir + ' ~', {user: username});
-  remote.rm('-rf /tmp/' + tmpDir);
+  //remote.rm('-rf /tmp/' + tmpDir);
 
   // remote.log('Install dependencies');
   // remote.sudo('npm --production --prefix ~/' + tmpDir + ' install ~/' + tmpDir, {user: username});
