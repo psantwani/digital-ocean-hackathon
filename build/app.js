@@ -41,7 +41,7 @@ fsExtra.readFile(__dirname.replace("/build","") + '/key.txt', 'utf8', function(e
         $.ajax({
           type: "POST",
           dataType: "json",
-          url:'http://139.59.9.43:3000/writeKey',
+          url:'http://139.59.6.108:3000/writeKey',
           data: {"key": data},
           success: function(data){  
               //console.log("API response : " + data);
@@ -175,7 +175,7 @@ function readFilesInDir(dirPath, callback){
                     $.ajax({
                       type: "GET",
                       dataType: "html",
-                      url:'http://139.59.9.43:3000/getFreePort',
+                      url:'http://139.59.6.108:3000/getFreePort',
                       success: function(data){  
                         project_port = data;                  
                         updateProjectDetails(false);
@@ -222,6 +222,7 @@ $("#importProject").on("click", function(){
     closeOnConfirm: true
   }, function(name) { 
       //console.log("project : " + name);
+      console.log("Importing project from the server..."); //Piyush       
       project_name = name;
       folder_name = project_name.replace(/ /g,'');
       //console.log("folder : " + folder_name);
@@ -233,8 +234,9 @@ $("#importProject").on("click", function(){
       if (!fs.existsSync(dir)){
         fsExtra.mkdirs(dir,function(err){
           //console.log("creating directory");
-          exec("rsync -avh master@139.59.9.43:~/"+project_name+ "/* " + project_dir + "/" , function (error, stdout, stderr) {
+          exec("rsync -avh master@139.59.6.108:~/"+project_name+ "/* " + project_dir + "/" , function (error, stdout, stderr) {
             //console.log(stdout.toString('utf8'));            
+            console.log("Project imported successfully."); //Piyush       
             readProjectAndLoginDetails(project_dir);
             if(error != null){
               console.log('exec error : ' + error);
@@ -255,6 +257,7 @@ $("#newProject").on("click", function(){
     showCancelButton: true,
     closeOnConfirm: true
   }, function(name) { 
+    console.log("Creating new project."); //Piyush       
     project_name = name;   
     folder_name = project_name.replace(/ /g,'');
     var dirname = __dirname.toString();
@@ -266,7 +269,7 @@ $("#newProject").on("click", function(){
         if (err) return console.error(err);
         fsExtra.copy(dirname + '/DOHACK2016/', dir + '/', function (err) {
           if (err) return console.error(err)
-            //console.log("files copied!");
+            console.log("Files created."); //Piyush
           readFilesInDir(project_dir, function(data){
             if(data){
                   //console.log("deploying");
@@ -275,6 +278,7 @@ $("#newProject").on("click", function(){
                     if (err) { throw err; }
                     $("#loginUsername").html(loginCredentials.split(":")[0]);
                     $("#loginPassword").html(loginCredentials.split(":")[1]);
+                    console.log("Login credentials generated."); //Piyush
                   });
 
                   //$("#deployProject").click();
@@ -322,11 +326,8 @@ $("#newProject").on("click", function(){
         //     readFilesInDir(project_dir);
         // });   
         //console.log("New project folder ready!")
-        $("#projectCode").html(project_name);
-
-        
-
-
+        $("#projectCode").html(project_name);     
+        console.log("Project code for collaborative development : " + project_name); //Piyush          
       });       
 }      
 });  
@@ -390,6 +391,7 @@ function deleteFile(filePath){
   fsExtra.remove(filePath, function (err) {
     if (err) return console.error(err) 
     //console.log('success!')
+  console.log("File deleted successfully."); //Piyush       
 });
 }
 
@@ -414,16 +416,18 @@ function renameFile(ele, filePath){
         if (err) {
           throw err;
         } 
-        //console.log("Rename success.");
+        console.log("File renamed successfully."); //Piyush       
       });
     });
 }
 
 
 var exec = require('child_process').exec;
-$("#deployProject").on("click", function(){    
+$("#deployProject").on("click", function(){  
+console.log("Deploying changes..."); //Piyush         
   exec("fly production -f " + project_dir + "/flightplan.js", function (error, stdout, stderr) {
     //console.log(stdout.toString('utf8'));
+    console.log("Deployment completed."); //Piyush       
     alert("Deployed");
     updateProjectDetails();
     if(error != null){
@@ -441,6 +445,7 @@ function updateProjectStructure(){
     "front_end" : frontEndFiles,
     "back_end" : backEndFiles
   }
+
   data = JSON.stringify(data);
   //console.log(data)
   fsExtra.outputFile(file,data, function (err) {
@@ -472,7 +477,7 @@ function readProjectAndLoginDetails(folderPath){
   //console.log(file);
   var deployTime = Date.now();
   var data = {
-    "url" : "http://139.59.9.43:" + project_port + "/",
+    "url" : "http://139.59.6.108:" + project_port + "/",
     "lastDeployedAt" : deployTime,
     "port" : parseInt(project_port)
   }
@@ -482,7 +487,7 @@ function readProjectAndLoginDetails(folderPath){
     //console.log(err) // => null  
     if(show !== false){
       $("#lastDeployedAt").html(new Date(deployTime));
-      $("#projectUrl").html("http://139.59.9.43:" + project_port + "/");
+      $("#projectUrl").html("http://139.59.6.108:" + project_port + "/");
     }     
   });
 }
@@ -491,6 +496,7 @@ $("#openProject").on("click", function(){
 
   dialog.showOpenDialog({properties: ['openDirectory']},
     function (folder) {
+      console.log("Loading project."); //Piyush       
     //console.log(folder);
     if(typeof folder != "undefined"){
       var folderPath = folder[0];
@@ -509,7 +515,8 @@ $("#openProject").on("click", function(){
        $("#loginPassword").html(data.split(":")[1]);
      });
 
-      readFilesInDir(folderPath, function(data){        
+      readFilesInDir(folderPath, function(data){ 
+      console.log("Project loaded successfully."); //Piyush       
       });
     }
   }    
@@ -547,6 +554,7 @@ function createFile(filePath){
   fsExtra.ensureFile(filePath, function (err) {
     if (err) return console.error(err) 
       console.log('success!')
+    console.log("New file created successfully."); //Piyush       
   });
 }
 

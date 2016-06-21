@@ -31,8 +31,8 @@ body {
   flex-direction: column;
 }
 #codeEditor {
-  height: 500px;
-  max-height: 500px;
+  height: 300px;
+  max-height: 300px;
   overflow: hidden;
   border: none;
   overflow-y: auto;
